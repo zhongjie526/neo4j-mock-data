@@ -2,6 +2,7 @@ package com.example.demo;
 
 import com.example.demo.domain.ColumnEntity;
 import com.example.demo.domain.DatasourceEntity;
+import com.example.demo.domain.RoleEntity;
 import com.example.demo.domain.TableEntity;
 import com.example.demo.repository.ColumnRepository;
 import com.example.demo.repository.DatasourceRepository;
@@ -31,9 +32,34 @@ public class DatasourceService {
         tableRepository.save(tableEntity);
     }
 
+    public void addRoleToTable(String roleName, String tableName) {
+        TableEntity tableEntity = addTableIfNotExists(tableName);
+        RoleEntity roleEntity = addRoleIfNotExists(roleName);
+
+        tableEntity.getRoles().add(roleEntity);
+        tableRepository.save(tableEntity);
+    }
+
+    public void addColumnToTable(String columnName, String tableName) {
+        ColumnEntity columnEntity = addColumnIfNotExists(columnName);
+        TableEntity tableEntity = addTableIfNotExists(tableName);
+        tableEntity.getColumns().add(columnEntity);
+        tableRepository.save(tableEntity);
+    }
+
+    private ColumnEntity addColumnIfNotExists(String columnName) {
+        if (!existsColumn(columnName)) {
+            log.info("Adding column: " + columnName);
+            return addColumn(columnName);
+        } else {
+            log.info("Column [" + columnName + "] exists");
+            return findColumn(columnName);
+        }
+    }
 
 
-  public DatasourceEntity addDatasourceIfNotExists(String dataSource) {
+
+    public DatasourceEntity addDatasourceIfNotExists(String dataSource) {
     if (!existsDatasource(dataSource)) {
         log.info("Adding data source: "+dataSource);
         return addDatasource(dataSource);
@@ -65,6 +91,12 @@ public class DatasourceService {
       return tableRepository.save(tbl);
   }
 
+    private ColumnEntity addColumn(String columnName) {
+        ColumnEntity col = new ColumnEntity();
+        col.setName(columnName);
+        return columnRepository.save(col);
+    }
+
   public boolean existsDatasource(String dataSource) {
         return datasourceRepository.existsByName(dataSource);
   }
@@ -88,4 +120,7 @@ public class DatasourceService {
     public ColumnEntity findColumn(String column) {
         return columnRepository.findByName(column);
     }
+
+
+
 }
