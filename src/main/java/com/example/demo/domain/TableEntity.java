@@ -28,4 +28,8 @@ public class TableEntity {
     @Getter @Setter
     @Relationship(type ="CONTAINS",direction = Relationship.Direction.OUTGOING)
     private Set<ColumnEntity> columns = new HashSet<>();
+
+    @Getter @Setter
+    @Relationship(type ="IS_ATTACHED",direction = Relationship.Direction.OUTGOING)
+    private Set<RoleEntity> roles = new HashSet<>();
 }
