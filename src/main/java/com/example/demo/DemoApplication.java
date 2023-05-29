@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import com.example.demo.service.PrepDataService;
 import com.example.demo.service.TraversalService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -9,10 +10,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class DemoApplication implements CommandLineRunner {
 
 	private final TraversalService traversalService;
+	private final PrepDataService prepDataService;
 
-	public DemoApplication(TraversalService traversalService) {
+	public DemoApplication(TraversalService traversalService, PrepDataService prepDataService) {
 
 		this.traversalService = traversalService;
+		this.prepDataService = prepDataService;
 	}
 
 	public static void main(String[] args) {
@@ -24,5 +27,6 @@ public class DemoApplication implements CommandLineRunner {
 
 		traversalService.performTraversal(18l);
 
+		prepDataService.createCustomConstraint();
 	}
 }
